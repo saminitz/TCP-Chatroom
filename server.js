@@ -3,7 +3,7 @@ let allSockets = [];
 
 class StopParent extends Error {
   constructor(message) {
-    this.message = message;
+    super(message)
   }
 }
 
@@ -20,7 +20,7 @@ function setUsernameIfNotDefined(socket, data) {
   if (item != undefined && item.username == undefined) {
     item.username = data.toString('ascii').replace('\r', '').replace('\n', '').title().replace(/ /g, '')
     socket.write('Benutzername erfolgreich gesetzt: ' + item.username + '\r\n\r\n');
-    throw 'Only setting username';
+    throw new StopParent('Only setting username');
   }
 }
 
