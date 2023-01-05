@@ -13,15 +13,34 @@ String.prototype.title = function () {
   });
 };
 
-function setUsernameIfNotDefined(socket, data) {
+function setUsername(socket, data, replaceUserName = false) {
   let item = allSockets.find(obj => {
     return obj.socket == socket;
   });
-  if (item != undefined && item.username == undefined) {
-    item.username = data.toString('ascii').replace('\r', '').replace('\n', '').title().replace(/ /g, '')
+  if (item != undefined && (item.username == undefined || replaceUserName)) {
+    item.username = data.toString('ascii').trim().replace('\r', '').replace('\n', '').replace(/ /g, '')
     socket.write('Benutzername erfolgreich gesetzt: ' + item.username + '\r\n\r\n');
-    throw new StopParent('Only setting username');
+    throw new StopParent('username');
   }
+}
+
+function commandHandler(socket, data) {
+  let message = data.toString('ascii');
+  if (!message.startsWith('/')) {
+    return;
+  }
+
+  let command = message.split(' ')[0];
+  switch (command) {
+    case '/rename':
+      setUsername(socket, message.substr(command.length + 1), true);
+      break;
+  
+    default:
+      break;
+  }
+
+  throw new StopParent('command')
 }
 
 function echoToAllSocketsExceptSender(socket, data) {
@@ -44,7 +63,8 @@ function createServer() {
 
     socket.on('data', function (data) {
       try {
-        setUsernameIfNotDefined(socket, data);
+        setUsername(socket, data);
+        commandHandler(socket, data);
         echoToAllSocketsExceptSender(socket, data);
       } catch (error) {
         if (!(error instanceof StopParent)) {
