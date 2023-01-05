@@ -1,6 +1,12 @@
 const net = require('net');
 let allSockets = [];
 
+class StopParent extends Error {
+  constructor(message) {
+    this.message = message;
+  }
+}
+
 String.prototype.title = function () {
   return this.replace(/\w\S*/g, function (txt) {
     return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
@@ -8,18 +14,13 @@ String.prototype.title = function () {
 };
 
 function setUsernameIfNotDefined(socket, data) {
-  let hasNoUsername = allSockets.find(obj => {
+  let item = allSockets.find(obj => {
     return obj.socket == socket;
-  }) == undefined;
-  if (hasNoUsername) {
-    let allSocketsElement = {
-      socket: socket,
-      username: data.toString('ascii').replace('\r', '').replace('\n', '').title().replace(/ /g, '')
-    }
-    allSockets.push(allSocketsElement);
-    socket.write('Benutzername erfolgreich gesetzt: ' + allSocketsElement.username + '\r\n\r\n');
-
-    new Error('Only setting username');
+  });
+  if (item != undefined && item.username == undefined) {
+    item.username = data.toString('ascii').replace('\r', '').replace('\n', '').title().replace(/ /g, '')
+    socket.write('Benutzername erfolgreich gesetzt: ' + item.username + '\r\n\r\n');
+    throw 'Only setting username';
   }
 }
 
@@ -36,15 +37,19 @@ function echoToAllSocketsExceptSender(socket, data) {
 
 function createServer() {
   var server = net.createServer(function (socket) {
+    // color code red \x1b\[31m 
     socket.write('Globaler Group Chat\r\n!!! Achtung nicht verschlüsselt !!!\r\n\r\nBenutzernamen eingeben:\r\n');
-    //socket.pipe(socket);
+
+    allSockets.push({socket: socket});
 
     socket.on('data', function (data) {
       try {
         setUsernameIfNotDefined(socket, data);
         echoToAllSocketsExceptSender(socket, data);
       } catch (error) {
-        
+        if (!(error instanceof StopParent)) {
+          throw error;
+        }
       }
     })
 
