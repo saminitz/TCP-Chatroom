@@ -1,5 +1,6 @@
+const global = require('./global');
 const customError = require('./customErrors');
-const user = require('./user')
+const user = require('./user');
 
 function query(socket, message) {
   if (!message.startsWith('/')) {
@@ -10,6 +11,10 @@ function query(socket, message) {
   switch (command) {
     case '/rename':
       user.setUsername(socket, message.substr(command.length + 1), true);
+      break;
+
+    case '/users':
+    case '/list':
       break;
 
     default:
