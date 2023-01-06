@@ -14,20 +14,28 @@ String.prototype.title = function () {
   });
 };
 
-function setUsername(socket, data, replaceUserName = false) {
+function setUsernameIfNotDefined(socket, username) {
+  let item = allSockets.some(obj => {
+    return obj.socket == socket;
+  });
+  if (item) {
+    return;
+  }
+  allSockets.push({ socket: socket });
+  setUsername(socket, username);
+}
+
+function setUsername(socket, username) {
   let item = allSockets.find(obj => {
     return obj.socket == socket;
   });
-  if (item != undefined && (item.username == undefined || replaceUserName)) {
-    item.username = data.toString('ascii').trim().replace('\r', '').replace('\n', '').replace(/ /g, '')
-    longestUsername = item.username.length > longestUsername ? item.username.length : longestUsername;
-    socket.write('Benutzername erfolgreich gesetzt: ' + item.username + '\r\n\r\n');
-    throw new StopParent('username');
-  }
+  item.username = username.trim().replace('\r', '').replace('\n', '').replace(/ /g, '')
+  longestUsername = item.username.length > longestUsername ? item.username.length : longestUsername;
+  socket.write('Benutzername erfolgreich gesetzt: ' + item.username + '\r\n\r\n');
+  throw new StopParent('username');
 }
 
-function commandHandler(socket, data) {
-  let message = data.toString('ascii');
+function commandHandler(socket, message) {
   if (!message.startsWith('/')) {
     return;
   }
@@ -37,7 +45,7 @@ function commandHandler(socket, data) {
     case '/rename':
       setUsername(socket, message.substr(command.length + 1), true);
       break;
-  
+
     default:
       break;
   }
@@ -45,33 +53,37 @@ function commandHandler(socket, data) {
   throw new StopParent('command')
 }
 
-function echoToAllSocketsExceptSender(socket, data) {
+function usernameAndSpacing(username) {
+  let fillLength = longestUsername - username.length;
+  return ' '.repeat(fillLength) + username + ' - ';
+}
+
+function echoToAllSockets(socket, data) {
   let username = allSockets.find(obj => {
     return obj.socket == socket;
   }).username;
-  let fillLength = longestUsername - (username.length);
   for (let i = 0; i < allSockets.length; i++) {
     if (allSockets[i].socket != socket) {
-      allSockets[i].socket.write('\r' + username + ': ' + ' '.repeat(fillLength > 0 ? fillLength : 0) + data.toString('ascii') + allSockets[i].username + ': ');
-      let fillLengthUser = longestUsername - (allSockets[i].username.length);
-      allSockets[i].socket.write(' '.repeat(fillLengthUser > 0 ? fillLengthUser : 0));
+      allSockets[i].socket.write(
+        '\r' + usernameAndSpacing(username)
+        + data
+        + usernameAndSpacing(allSockets[i].username));
     }
   }
-  socket.write(username + ': ' + ' '.repeat(fillLength > 0 ? fillLength : 0));
+  socket.write(usernameAndSpacing(username));
 }
 
 function createServer() {
   var server = net.createServer(function (socket) {
+    socket.setEncoding('utf8');
     // color code red \x1b\[31m 
     socket.write('Globaler Group Chat\r\n!!! Achtung nicht verschlüsselt !!!\r\n\r\nBenutzernamen eingeben:\r\n');
 
-    allSockets.push({socket: socket});
-
     socket.on('data', function (data) {
       try {
-        setUsername(socket, data);
+        setUsernameIfNotDefined(socket, data);
         commandHandler(socket, data);
-        echoToAllSocketsExceptSender(socket, data);
+        echoToAllSockets(socket, data);
       } catch (error) {
         if (!(error instanceof StopParent)) {
           throw error;
@@ -79,7 +91,7 @@ function createServer() {
       }
     })
 
-    socket.on('error', function(){
+    socket.on('error', function () {
       let item = allSockets.find(obj => {
         return obj.socket == socket;
       })
