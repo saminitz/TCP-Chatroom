@@ -1,4 +1,5 @@
 const customError = require('./customErrors');
+const user = require('./user')
 
 function query(socket, message) {
   if (!message.startsWith('/')) {
@@ -8,7 +9,7 @@ function query(socket, message) {
   let command = message.split(' ')[0];
   switch (command) {
     case '/rename':
-      setUsername(socket, message.substr(command.length + 1), true);
+      user.setUsername(socket, message.substr(command.length + 1), true);
       break;
 
     default:
