@@ -1,5 +1,6 @@
 const net = require('net');
 let allSockets = [];
+let longestUsername = 0;
 
 class StopParent extends Error {
   constructor(message) {
@@ -19,6 +20,7 @@ function setUsername(socket, data, replaceUserName = false) {
   });
   if (item != undefined && (item.username == undefined || replaceUserName)) {
     item.username = data.toString('ascii').trim().replace('\r', '').replace('\n', '').replace(/ /g, '')
+    longestUsername = item.username.length > longestUsername ? item.username.length : longestUsername;
     socket.write('Benutzername erfolgreich gesetzt: ' + item.username + '\r\n\r\n');
     throw new StopParent('username');
   }
@@ -47,11 +49,15 @@ function echoToAllSocketsExceptSender(socket, data) {
   let username = allSockets.find(obj => {
     return obj.socket == socket;
   }).username;
+  let fillLength = longestUsername - (username.length);
   for (let i = 0; i < allSockets.length; i++) {
     if (allSockets[i].socket != socket) {
-      allSockets[i].socket.write(username + ': ' + data.toString('ascii'));
+      allSockets[i].socket.write('\r' + username + ': ' + ' '.repeat(fillLength > 0 ? fillLength : 0) + data.toString('ascii') + allSockets[i].username + ': ');
+      let fillLengthUser = longestUsername - (allSockets[i].username.length);
+      allSockets[i].socket.write(' '.repeat(fillLengthUser > 0 ? fillLengthUser : 0));
     }
   }
+  socket.write(username + ': ' + ' '.repeat(fillLength > 0 ? fillLength : 0));
 }
 
 function createServer() {
