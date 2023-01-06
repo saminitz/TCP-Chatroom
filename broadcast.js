@@ -9,7 +9,7 @@ function echoToAllSockets(socket, data) {
     if (global.allSockets[i].socket != socket) {
       global.allSockets[i].socket.write(
         '\r' + user.usernameAndSpacing(username)
-        + data
+        + data + '\r\n'
         + user.usernameAndSpacing(global.allSockets[i].username));
     }
   }

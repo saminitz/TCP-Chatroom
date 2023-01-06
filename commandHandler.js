@@ -10,7 +10,8 @@ function query(socket, message) {
   let command = message.split(' ')[0];
   switch (command) {
     case '/rename':
-      user.setUsername(socket, message.substr(command.length + 1), true);
+      if (message.length > '/rename'.length + 1)
+        user.setUsername(socket, message.substr(command.length + 1), true);
       break;
 
     case '/users':

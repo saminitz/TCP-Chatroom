@@ -12,6 +12,7 @@ function createServer() {
     socket.write('Globaler Group Chat\r\n!!! Achtung nicht verschlüsselt !!!\r\n\r\nBenutzernamen eingeben:\r\n');
 
     socket.on('data', function (data) {
+      data = data.replace(/\r|\n/g, '');
       try {
         user.setUsernameIfNotDefined(socket, data);
         commandHandler.query(socket, data);
