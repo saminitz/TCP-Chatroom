@@ -18,7 +18,7 @@ function setUsername(socket, username) {
   let item = global.allSockets.find(obj => {
     return obj.socket == socket;
   });
-  item.username = username.trim().replace('\r', '').replace('\n', '').replace(/ /g, '')
+  item.username = username.trim().replace(/\r|\n|\ /g, '');
   longestUsername = item.username.length > longestUsername ? item.username.length : longestUsername;
   socket.write('Benutzername erfolgreich gesetzt: ' + item.username + '\r\n\r\n');
   throw new customError.StopParent('username');
