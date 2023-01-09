@@ -14,15 +14,15 @@ function query(socket, message) {
     case '/rename':
       if (message.length > '/rename'.length + 1){ 
         let oldUsername = user.getUsername(socket);
-        user.setUsername(global.allSocketsItem(socket), message.substr(command.length + 1), true);
-        broadcast.echoToAllSockets(socket, oldUsername + ' hat sich zu ' + user.getUsername(socket) + 'umbenannt');
+        user.setUsername(global.getConnection(socket), message.substr(command.length + 1), true);
+        broadcast.broadcastMessage(socket, oldUsername + ' hat sich zu ' + user.getUsername(socket) + ' umbenannt');
       }
       break;
 
     case '/users':
     case '/list':
       usernames = []
-      for (const socketItem of global.allSockets) {
+      for (const socketItem of global.allConnections) {
         usernames.push(socketItem.username);
       }
       socket.write("\rCurrently connected users are: " + usernames.join(", ") + "\r\n" + user.usernameAndSpacing(user.getUsername(socket)) + "\r\n");

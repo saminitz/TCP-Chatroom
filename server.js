@@ -23,7 +23,7 @@ function createServer() {
       try {
         user.setUsernameIfNotDefined(socket, message);
         commandHandler.query(socket, message);
-        broadcast.echoToAllSockets(socket, message);
+        broadcast.broadcastMessage(socket, message);
       } catch (error) {
         if (!(error instanceof customError.StopParent)) {
           throw error;
@@ -32,10 +32,10 @@ function createServer() {
     })
 
     socket.on('error', function () {
-      let item = global.allSockets.find(obj => {
+      let item = global.allConnections.find(obj => {
         return obj.socket == socket;
       })
-      global.allSockets.splice(global.allSockets.indexOf(item), 1);
+      global.allConnections.splice(global.allConnections.indexOf(item), 1);
     })
   });
 
