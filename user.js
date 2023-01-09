@@ -1,5 +1,6 @@
 const global = require('./global');
 const customError = require('./customErrors');
+const { echoToAllSockets } = require('./broadcast');
 
 let longestUsername = 0;
 
@@ -12,6 +13,7 @@ function setUsernameIfNotDefined(socket, username) {
   }
   global.allSockets.push({ socket: socket });
   setUsername(socket, username);
+  echoToAllSockets(socket, user.getUsername() + ' ist dem Chat beigetreten');
 }
 
 function setUsername(socket, username) {
