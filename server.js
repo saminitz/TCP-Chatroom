@@ -1,9 +1,16 @@
+const net = require('net');
+const os = require('os');
+
 const global = require('./global');
 const customError = require('./customErrors');
 const commandHandler = require('./commandHandler');
 const user = require('./user');
 const broadcast = require('./broadcast');
-const net = require('net');
+
+let args = process.argv.slice(2);
+let port = args.length>0 ? args[0] : 1337;
+let localip = [].concat(...Object.values(require('os').networkInterfaces())).find(x => !x.internal && x.family === 'IPv4')?.address
+
 
 function createServer() {
   var server = net.createServer(function (socket) {
@@ -32,7 +39,9 @@ function createServer() {
     })
   });
 
-  server.listen(1337, '0.0.0.0');
+  server.listen(port, '0.0.0.0', ()=>{
+    console.log("Server started\nTo connect a client: 'nc " + localip + " " + server.address().port + "'" );
+  });
 }
 
 createServer();
