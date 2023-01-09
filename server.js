@@ -44,4 +44,10 @@ function createServer() {
   });
 }
 
+function closeSocketConnection(socket) {
+  socket.destroy();
+}
+
 createServer();
+
+module.exports.closeSocketConnection = closeSocketConnection;
