@@ -25,7 +25,7 @@ function query(socket, message) {
       for (const mySocket of global.allSockets) {
         usernames.push(mySocket.username);
       }
-      socket.write("\rCurrently connected users are: " + usernames.join(", ") + user.usernameAndSpacing(getUsername(socket))+"\r\n");
+      socket.write("\rCurrently connected users are: " + usernames.join(", ") + "\r\n" + user.usernameAndSpacing(user.getUsername(socket)) + "\r\n");
       break;
 
     case '/logout':
