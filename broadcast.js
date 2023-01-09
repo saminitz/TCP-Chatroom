@@ -14,7 +14,6 @@ function echoToAllSockets(socket, message) {
   socket.write(user.usernameAndSpacing(username));
 }
 
-
 function usernamePreview(socket) {
   socket.write("\r" + user.usernameAndSpacing(user.getUsername(socket)) + ": ");
 }
