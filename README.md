@@ -4,6 +4,12 @@ A Chatroom based on the TCP protocol. Can be used with netcat.
 
 ## Usage
 
-Start a server: `node server.js`
+### Server
 
-Connect as a client `nc <serverIP> 1337`
+Start a server: `node server.js <port>`
+
+If no port is specified, it defaults to 1337
+
+### Client
+
+Connect as a client `nc <serverIP> <port>`
