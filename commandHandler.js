@@ -22,10 +22,10 @@ function query(socket, message) {
     case '/users':
     case '/list':
       usernames = []
-      for (const mysocket of global.allSockets) {
-        usernames.push(mysocket.username);
+      for (const mySocket of global.allSockets) {
+        usernames.push(mySocket.username);
       }
-      socket.write("\rCurrently connected users are: " + usernames.join(", ") + user.usernameAndSpacing(username)+"\r\n");
+      socket.write("\rCurrently connected users are: " + usernames.join(", ") + user.usernameAndSpacing(getUsername(socket))+"\r\n");
       break;
 
     case '/logout':
