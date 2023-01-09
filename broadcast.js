@@ -3,12 +3,9 @@ const user = require('./user');
 
 function echoToAllSockets(socket, message) {
   let username = user.getUsername(socket);
-  for (let i = 0; i < global.allSockets.length; i++) {
+  for (let socketItem of global.allSockets) {
     if (global.allSockets[i].socket != socket) {
-      global.allSockets[i].socket.write(
-        '\r' + user.usernameAndSpacing(username)
-        + message + '\r\n'
-        + user.usernameAndSpacing(global.allSockets[i].username));
+      sendMessage(socketItem,message);
     }
   }
   socket.write(user.usernameAndSpacing(username));
