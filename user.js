@@ -1,6 +1,6 @@
 const global = require('./global');
 const customError = require('./customErrors');
-const { broadcastMessage } = require('./broadcast');
+const messaging = require('./messaging');
 
 let longestUsername = 0;
 
@@ -11,7 +11,7 @@ function setUsernameIfNotDefined(socket, username) {
   let item = { socket: socket };
   setUsername(item, username);
   global.allConnections.push(item);
-  broadcastMessage(socket, getUsername(socket) + ' ist dem Chat beigetreten');
+  messaging.broadcast(socket, getUsername(socket) + ' ist dem Chat beigetreten');
   throw new customError.StopParent('username');
 }
 

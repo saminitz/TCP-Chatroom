@@ -1,7 +1,7 @@
 const global = require('./global');
 const user = require('./user');
 
-function broadcastMessage(socket, message) {
+function broadcast(socket, message) {
   let username = user.getUsername(socket);
   for (let connection of global.allConnections) {
     if (connection.socket != socket) {
@@ -25,7 +25,7 @@ function sendMessage(socket, text) {
   usernamePreview(socket);
 }
 
-module.exports.broadcastMessage = broadcastMessage;
+module.exports.broadcast = broadcast;
 module.exports.usernamePreview = usernamePreview;
 module.exports.sendRawLine = sendRawLine;
 module.exports.sendMessage = sendMessage;
