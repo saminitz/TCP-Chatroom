@@ -9,7 +9,7 @@ const broadcast = require('./broadcast');
 
 let args = process.argv.slice(2);
 let port = args.length>0 ? args[0] : 1337;
-let localip = [].concat(...Object.values(require('os').networkInterfaces())).find(x => !x.internal && x.family === 'IPv4')?.address
+let localIP = [].concat(...Object.values(require('os').networkInterfaces())).find(x => !x.internal && x.family === 'IPv4')?.address
 
 
 function createServer() {
@@ -40,7 +40,7 @@ function createServer() {
   });
 
   server.listen(port, '0.0.0.0', ()=>{
-    console.log("Server started\nTo connect a client: 'nc " + localip + " " + server.address().port + "'" );
+    console.log("Server started\nTo connect a client: 'nc " + localIP + " " + server.address().port + "'" );
   });
 }
 
