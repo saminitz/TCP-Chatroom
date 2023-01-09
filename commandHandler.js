@@ -16,6 +16,11 @@ function query(socket, message) {
 
     case '/users':
     case '/list':
+      usernames = []
+      for (const mysocket of global.allSockets) {
+        usernames.push(mysocket.username);
+      }
+      socket.write("\rCurrently connected users are: " + usernames.join(", ") + user.usernameAndSpacing(username)+"\r\n");
       break;
 
     default:
