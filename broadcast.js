@@ -4,7 +4,7 @@ const user = require('./user');
 function echoToAllSockets(socket, message) {
   let username = user.getUsername(socket);
   for (let socketItem of global.allSockets) {
-    if (global.allSockets[i].socket != socket) {
+    if (socketItem.socket != socket) {
       sendMessage(socketItem,message);
     }
   }
