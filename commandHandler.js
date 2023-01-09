@@ -1,7 +1,7 @@
 const global = require('./global');
 const customError = require('./customErrors');
 const user = require('./user');
-const miscellaneous = require('./miscellaneous');
+const server = require('./server');
 const broadcast = require('./broadcast');
 
 function query(socket, message) {
@@ -22,14 +22,14 @@ function query(socket, message) {
     case '/users':
     case '/list':
       usernames = []
-      for (const mySocket of global.allSockets) {
-        usernames.push(mySocket.username);
+      for (const socketItem of global.allSockets) {
+        usernames.push(socketItem.username);
       }
       socket.write("\rCurrently connected users are: " + usernames.join(", ") + "\r\n" + user.usernameAndSpacing(user.getUsername(socket)) + "\r\n");
       break;
 
     case '/logout':
-      miscellaneous.closeSocketConnection(socket);
+      server.closeSocketConnection(socket);
       break;
 
     default:
