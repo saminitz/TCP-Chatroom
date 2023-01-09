@@ -5,7 +5,7 @@ function echoToAllSockets(socket, message) {
   let username = user.getUsername(socket);
   for (let socketItem of global.allSockets) {
     if (socketItem.socket != socket) {
-      sendMessage(socketItem,message);
+      sendMessage(socketItem.socket, message);
     }
   }
   socket.write(user.usernameAndSpacing(username));
