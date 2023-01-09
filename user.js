@@ -5,25 +5,20 @@ const { echoToAllSockets } = require('./broadcast');
 let longestUsername = 0;
 
 function setUsernameIfNotDefined(socket, username) {
-  let item = global.allSockets.some(obj => {
-    return obj.socket == socket;
-  });
-  if (item) {
+  if (global.allSocketsItemExists(socket)) {
     return;
   }
-  global.allSockets.push({ socket: socket });
-  setUsername(socket, username);
+  let item = { socket: socket };
+  setUsername(item, username);
+  global.allSockets.push(item)
   echoToAllSockets(socket, getUsername(socket) + ' ist dem Chat beigetreten');
   throw new customError.StopParent('username');
 }
 
-function setUsername(socket, username) {
-  let item = global.allSockets.find(obj => {
-    return obj.socket == socket;
-  });
-  item.username = username.trim().replace(/\r|\n|\ /g, '');
-  longestUsername = item.username.length > longestUsername ? item.username.length : longestUsername;
-  socket.write('Benutzername erfolgreich gesetzt: ' + item.username + '\r\n\r\n');
+function setUsername(allSocketItem, username) {
+  allSocketItem.username = username.trim().replace(/\r|\n|\ /g, '');
+  longestUsername = allSocketItem.username.length > longestUsername ? allSocketItem.username.length : longestUsername;
+  allSocketItem.socket.write('Benutzername erfolgreich gesetzt: ' + allSocketItem.username + '\r\n\r\n');
 }
 
 function getUsername(socket) {
