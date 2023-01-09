@@ -2,9 +2,7 @@ const global = require('./global');
 const user = require('./user');
 
 function echoToAllSockets(socket, data) {
-  let username = global.allSockets.find(obj => {
-    return obj.socket == socket;
-  }).username;
+  let username = user.getUsername(socket);
   for (let i = 0; i < global.allSockets.length; i++) {
     if (global.allSockets[i].socket != socket) {
       global.allSockets[i].socket.write(
