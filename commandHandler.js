@@ -1,7 +1,7 @@
 const global = require('./global');
 const customError = require('./customErrors');
 const user = require('./user');
-const miscellaneous = require('./miscellaneous');
+const server = require('./server');
 const broadcast = require('./broadcast');
 
 function query(socket, message) {
@@ -29,7 +29,7 @@ function query(socket, message) {
       break;
 
     case '/logout':
-      miscellaneous.closeSocketConnection(socket);
+      server.closeSocketConnection(socket);
       break;
 
     default:
