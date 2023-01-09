@@ -5,7 +5,7 @@ const global = require('./global');
 const customError = require('./customErrors');
 const commandHandler = require('./commandHandler');
 const user = require('./user');
-const broadcast = require('./broadcast');
+const messaging = require('./messaging');
 
 let args = process.argv.slice(2);
 let port = args.length>0 ? args[0] : 1337;
@@ -23,7 +23,7 @@ function createServer() {
       try {
         user.setUsernameIfNotDefined(socket, message);
         commandHandler.query(socket, message);
-        broadcast.broadcastMessage(socket, message);
+        messaging.broadcast(socket, message);
       } catch (error) {
         if (!(error instanceof customError.StopParent)) {
           throw error;

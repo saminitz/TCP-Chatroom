@@ -2,7 +2,7 @@ const global = require('./global');
 const customError = require('./customErrors');
 const user = require('./user');
 const server = require('./server');
-const broadcast = require('./broadcast');
+const messaging = require('./messaging');
 
 function query(socket, message) {
   if (!message.startsWith('/')) {
@@ -15,7 +15,7 @@ function query(socket, message) {
       if (message.length > '/rename'.length + 1){ 
         let oldUsername = user.getUsername(socket);
         user.setUsername(global.getConnection(socket), message.substr(command.length + 1), true);
-        broadcast.broadcastMessage(socket, oldUsername + ' hat sich zu ' + user.getUsername(socket) + ' umbenannt');
+        messaging.broadcast(socket, oldUsername + ' hat sich zu ' + user.getUsername(socket) + ' umbenannt');
       }
       break;
 
