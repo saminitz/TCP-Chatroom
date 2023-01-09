@@ -1,15 +1,13 @@
 const global = require('./global');
 const user = require('./user');
 
-function echoToAllSockets(socket, data) {
-  let username = global.allSockets.find(obj => {
-    return obj.socket == socket;
-  }).username;
+function echoToAllSockets(socket, message) {
+  let username = user.getUsername(socket);
   for (let i = 0; i < global.allSockets.length; i++) {
     if (global.allSockets[i].socket != socket) {
       global.allSockets[i].socket.write(
         '\r' + user.usernameAndSpacing(username)
-        + data
+        + message + '\r\n'
         + user.usernameAndSpacing(global.allSockets[i].username));
     }
   }

@@ -11,11 +11,12 @@ function createServer() {
     // color code red \x1b\[31m 
     socket.write('Globaler Group Chat\r\n!!! Achtung nicht verschlüsselt !!!\r\n\r\nBenutzernamen eingeben:\r\n');
 
-    socket.on('data', function (data) {
+    socket.on('data', function (message) {
+      message = message.replace(/\r|\n/g, '');
       try {
-        user.setUsernameIfNotDefined(socket, data);
-        commandHandler.query(socket, data);
-        broadcast.echoToAllSockets(socket, data);
+        user.setUsernameIfNotDefined(socket, message);
+        commandHandler.query(socket, message);
+        broadcast.echoToAllSockets(socket, message);
       } catch (error) {
         if (!(error instanceof customError.StopParent)) {
           throw error;
