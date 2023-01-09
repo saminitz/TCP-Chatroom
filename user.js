@@ -13,7 +13,7 @@ function setUsernameIfNotDefined(socket, username) {
   }
   global.allSockets.push({ socket: socket });
   setUsername(socket, username);
-  echoToAllSockets(socket, user.getUsername() + ' ist dem Chat beigetreten');
+  echoToAllSockets(socket, user.getUsername(socket) + ' ist dem Chat beigetreten');
 }
 
 function setUsername(socket, username) {
