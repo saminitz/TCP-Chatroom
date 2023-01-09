@@ -1,6 +1,7 @@
 const global = require('./global');
 const customError = require('./customErrors');
 const user = require('./user');
+const miscellaneous = require('./miscellaneous');
 
 function query(socket, message) {
   if (!message.startsWith('/')) {
@@ -21,6 +22,10 @@ function query(socket, message) {
         usernames.push(mysocket.username);
       }
       socket.write("\rCurrently connected users are: " + usernames.join(", ") + user.usernameAndSpacing(username)+"\r\n");
+      break;
+
+    case '/logout':
+      miscellaneous.closeSocketConnection(socket);
       break;
 
     default:
