@@ -1,6 +1,7 @@
 const global = require('./global');
 const customError = require('./customErrors');
 const user = require('./user');
+const miscellaneous = require('./miscellaneous');
 
 function query(socket, message) {
   if (!message.startsWith('/')) {
@@ -16,6 +17,10 @@ function query(socket, message) {
 
     case '/users':
     case '/list':
+      break;
+
+    case '/logout':
+      miscellaneous.closeSocketConnection(socket);
       break;
 
     default:
