@@ -1,11 +1,11 @@
 const global = require('./global');
 const user = require('./user');
 
-function echoToAllSockets(socket, message) {
+function broadcastMessage(socket, message) {
   let username = user.getUsername(socket);
-  for (let socketItem of global.allSockets) {
-    if (socketItem.socket != socket) {
-      sendMessage(socketItem.socket, message);
+  for (let connection of global.allConnections) {
+    if (connection.socket != socket) {
+      sendMessage(connection.socket, message);
     }
   }
   socket.write(user.usernameAndSpacing(username));
@@ -20,12 +20,12 @@ function sendRawLine(socket, text) {
   usernamePreview(socket); // is it useful here?
 }
 
-function sendMessage(socket) {
+function sendMessage(socket, text) {
   socket.write("\r" + user.usernameAndSpacing(user.getUsername(socket)) + ": " + text + "\r\n");
   usernamePreview(socket);
 }
 
-module.exports.echoToAllSockets = echoToAllSockets;
+module.exports.broadcastMessage = broadcastMessage;
 module.exports.usernamePreview = usernamePreview;
 module.exports.sendRawLine = sendRawLine;
 module.exports.sendMessage = sendMessage;

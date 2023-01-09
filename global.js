@@ -1,17 +1,17 @@
-let allSockets = [];
+let allConnections = [];
 
-function allSocketsItem(socket) {
-  return allSockets.find(obj => {
+function getConnection(socket) {
+  return allConnections.find(obj => {
     return obj.socket == socket;
   });
 }
 
-function allSocketsItemExists(socket) {
-  return allSockets.some(obj => {
+function connectionExits(socket) {
+  return allConnections.some(obj => {
     return obj.socket == socket;
   });
 }
 
-module.exports.allSockets = allSockets;
-module.exports.allSocketsItem = allSocketsItem;
-module.exports.allSocketsItemExists = allSocketsItemExists;
+module.exports.allConnections = allConnections;
+module.exports.getConnection = getConnection;
+module.exports.connectionExits = connectionExits;
