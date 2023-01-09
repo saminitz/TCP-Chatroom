@@ -18,7 +18,7 @@ function setUsernameIfNotDefined(socket, username) {
 function setUsername(connection, username) {
   connection.username = username.trim().replace(/\r|\n|\ /g, '');
   longestUsername = connection.username.length > longestUsername ? connection.username.length : longestUsername;
-  connection.socket.write('Benutzername erfolgreich gesetzt: ' + connection.username + '\r\n\r\n');
+  messaging.sendRawLine(connection.socket,'Benutzername erfolgreich gesetzt: ' + connection.username);
 }
 
 function getUsername(socket) {
