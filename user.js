@@ -13,7 +13,8 @@ function setUsernameIfNotDefined(socket, username) {
   }
   global.allSockets.push({ socket: socket });
   setUsername(socket, username);
-  echoToAllSockets(socket, user.getUsername(socket) + ' ist dem Chat beigetreten');
+  echoToAllSockets(socket, getUsername(socket) + ' ist dem Chat beigetreten');
+  throw new customError.StopParent('username');
 }
 
 function setUsername(socket, username) {
@@ -23,7 +24,6 @@ function setUsername(socket, username) {
   item.username = username.trim().replace(/\r|\n|\ /g, '');
   longestUsername = item.username.length > longestUsername ? item.username.length : longestUsername;
   socket.write('Benutzername erfolgreich gesetzt: ' + item.username + '\r\n\r\n');
-  throw new customError.StopParent('username');
 }
 
 function getUsername(socket) {
