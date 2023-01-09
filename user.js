@@ -10,7 +10,7 @@ function setUsernameIfNotDefined(socket, username) {
   }
   let item = { socket: socket };
   setUsername(item, username);
-  global.allSockets.push(item)
+  global.allSockets.push(item);
   echoToAllSockets(socket, getUsername(socket) + ' ist dem Chat beigetreten');
   throw new customError.StopParent('username');
 }
