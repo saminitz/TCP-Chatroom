@@ -13,7 +13,7 @@ function query(socket, message) {
   switch (command) {
     case '/rename':
       if (message.length > '/rename'.length + 1){ 
-        let oldUsername = user.getUsername();
+        let oldUsername = user.getUsername(socket);
         user.setUsername(socket, message.substr(command.length + 1), true);
         echoToAllSockets(socket, oldUsername + ' hat sich zu ' + user.getUsername(socket) + 'umbenannt');
       }
