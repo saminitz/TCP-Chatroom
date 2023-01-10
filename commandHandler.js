@@ -15,7 +15,7 @@ function query(socket, message) {
       if (message.length > '/rename'.length + 1) {
         let oldUsername = user.getUsername(socket);
         user.setUsername(global.getConnection(socket), message.substr(command[0].length + 1), true);
-        messaging.broadcast(socket, oldUsername + ' hat sich zu ' + user.getUsername(socket) + ' umbenannt');
+        messaging.broadcastRaw(socket, oldUsername + ' hat sich zu ' + user.getUsername(socket) + ' umbenannt');
       }
       break;
 
@@ -33,6 +33,7 @@ function query(socket, message) {
       break;
 
     default:
+      messaging.sendRawLineAndUser(socket, "Command invalid");
       break;
   }
 
