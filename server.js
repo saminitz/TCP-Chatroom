@@ -31,15 +31,9 @@ function createServer() {
       }
     })
 
-    socket.on('close', function () {
-      disconnectHandler(socket)
-    });
-    socket.on('timeout', function () {
-      disconnectHandler(socket)
-    });
-    socket.on('error', function () {
-      disconnectHandler(socket)
-    });
+    socket.on('close', function () { disconnectHandler(socket) });
+    socket.on('timeout', function () { disconnectHandler(socket) });
+    socket.on('error', function () { disconnectHandler(socket) });
   });
 
   server.listen(port, '0.0.0.0', () => {
@@ -48,11 +42,13 @@ function createServer() {
 }
 
 function disconnectHandler(socket) {
+  let username = user.getUsername(socket);
   let item = global.allConnections.find(obj => {
     return obj.socket == socket;
   });
   global.allConnections.splice(global.allConnections.indexOf(item), 1);
   user.updateLongestUsername();
+  messaging.broadcastRaw(undefined, username + " disconnected");
 }
 
 function closeSocketConnection(socket) {

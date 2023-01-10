@@ -7,7 +7,9 @@ function broadcast(socket, message) {
       sendMessage(connection.socket, user.getUsername(socket), message);
     }
   }
-  usernamePreview(socket);
+  if (socket != undefined) {
+    usernamePreview(socket);
+  }
 }
 
 function broadcastRaw(socket, text) {
@@ -16,7 +18,9 @@ function broadcastRaw(socket, text) {
       sendRawLineAndUser(connection.socket, text);
     }
   }
-  usernamePreview(socket);
+  if (socket != undefined) {
+    usernamePreview(socket);
+  }
 }
 
 function usernamePreview(socket) {
