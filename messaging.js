@@ -37,7 +37,7 @@ function sendRawLineAndUser(socket, text) {
 }
 
 function sendMessage(socket, senderName, text) {
-  socket.write("\r" + user.usernameAndSpacing(senderName) + " -> " + text + "\r\n");
+  socket.write("\r" + user.usernameAndSpacing(senderName) + ": " + text + "\r\n");
   usernamePreview(socket);
 }
 
