@@ -14,7 +14,7 @@ function query(socket, message) {
     case '/rename':
       if (message.length > '/rename'.length + 1) {
         let oldUsername = user.getUsername(socket);
-        user.setUsername(global.getConnection(socket), message.substr(command.length + 1), true);
+        user.setUsername(global.getConnection(socket), message.substr(command[0].length + 1), true);
         messaging.broadcast(socket, oldUsername + ' hat sich zu ' + user.getUsername(socket) + ' umbenannt');
       }
       break;
