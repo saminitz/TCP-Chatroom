@@ -10,7 +10,7 @@ function setUsernameIfNotDefined(socket, username) {
   }
   let item = { socket: socket, username: 'newUser' };
   global.allConnections.push(item);
-  setUsername(socket, username);
+  setUsername(item, username);
   messaging.broadcastRaw(socket, getUsername(socket) + ' ist dem Chat beigetreten');
   throw new customError.StopParent('username');
 }
@@ -18,7 +18,7 @@ function setUsernameIfNotDefined(socket, username) {
 function setUsername(connection, username) {
   connection.username = username.trim().replace(/\r|\n|\ /g, '');
   updateLongestUsername();
-  messaging.sendRawLineAndUser(connection.socket,'Benutzername erfolgreich gesetzt: ' + connection.username);
+  messaging.sendRawLineAndUser(connection.socket, 'Benutzername erfolgreich gesetzt: ' + connection.username);
 }
 
 function getUsername(socket) {
@@ -34,8 +34,8 @@ function usernameAndSpacing(username) {
 
 function updateLongestUsername() {
   longestUsername = 0;
-  for (const username of global.allConnections) {
-    longestUsername = username.length > longestUsername ? username.length : longestUsername;
+  for (const connection of global.allConnections) {
+    longestUsername = connection.username.length > longestUsername ? connection.username.length : longestUsername;
   }
 }
 
@@ -43,3 +43,4 @@ module.exports.setUsernameIfNotDefined = setUsernameIfNotDefined;
 module.exports.setUsername = setUsername;
 module.exports.getUsername = getUsername;
 module.exports.usernameAndSpacing = usernameAndSpacing;
+module.exports.updateLongestUsername = updateLongestUsername;

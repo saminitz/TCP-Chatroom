@@ -8,7 +8,7 @@ const user = require('./user');
 const messaging = require('./messaging');
 
 let args = process.argv.slice(2);
-let port = args.length>0 ? args[0] : 1337;
+let port = args.length > 0 ? args[0] : 1337;
 let localIP = [].concat(...Object.values(os.networkInterfaces())).find(x => !x.internal && x.family === 'IPv4')?.address
 
 
@@ -31,17 +31,28 @@ function createServer() {
       }
     })
 
+    socket.on('close', function () {
+      disconnectHandler(socket)
+    });
+    socket.on('timeout', function () {
+      disconnectHandler(socket)
+    });
     socket.on('error', function () {
-      let item = global.allConnections.find(obj => {
-        return obj.socket == socket;
-      })
-      global.allConnections.splice(global.allConnections.indexOf(item), 1);
-    })
+      disconnectHandler(socket)
+    });
   });
 
-  server.listen(port, '0.0.0.0', ()=>{
-    console.log("Server started\nTo connect a client: 'nc " + localIP + " " + server.address().port + "'" );
+  server.listen(port, '0.0.0.0', () => {
+    console.log("Server started\nTo connect a client: 'nc " + localIP + " " + server.address().port + "'");
   });
+}
+
+function disconnectHandler(socket) {
+  let item = global.allConnections.find(obj => {
+    return obj.socket == socket;
+  });
+  global.allConnections.splice(global.allConnections.indexOf(item), 1);
+  user.updateLongestUsername();
 }
 
 function closeSocketConnection(socket) {

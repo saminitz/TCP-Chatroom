@@ -9,10 +9,10 @@ function query(socket, message) {
     return;
   }
 
-  let command = message.split(' ')[0];
-  switch (command) {
+  let command = message.split(' ');
+  switch (command[0].toLowerCase()) {
     case '/rename':
-      if (message.length > '/rename'.length + 1){ 
+      if (message.length > '/rename'.length + 1) {
         let oldUsername = user.getUsername(socket);
         user.setUsername(global.getConnection(socket), message.substr(command.length + 1), true);
         messaging.broadcast(socket, oldUsername + ' hat sich zu ' + user.getUsername(socket) + ' umbenannt');
@@ -25,7 +25,7 @@ function query(socket, message) {
       for (const socketItem of global.allConnections) {
         usernames.push(socketItem.username);
       }
-      messaging.sendRawLineAndUser(socket, "Currently connected users are: " + usernames.join(", ") + "\r\n" );
+      messaging.sendRawLineAndUser(socket, "Currently connected users are: " + usernames.join(", ") + "\r\n");
       break;
 
     case '/logout':
