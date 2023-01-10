@@ -4,7 +4,7 @@ const user = require('./user');
 function broadcast(socket, message) {
   for (let connection of global.allConnections) {
     if (connection.socket != socket) {
-      sendMessage(connection.socket, message);
+      sendMessage(connection.socket, user.getUsername(socket), message);
     }
   }
   usernamePreview(socket);
@@ -32,8 +32,8 @@ function sendRawLineAndUser(socket, text) {
   usernamePreview(socket);
 }
 
-function sendMessage(socket, text) {
-  socket.write("\r" + user.usernameAndSpacing(user.getUsername(socket)) + " -> " + text + "\r\n");
+function sendMessage(socket, senderName, text) {
+  socket.write("\r" + user.usernameAndSpacing(senderName) + " -> " + text + "\r\n");
   usernamePreview(socket);
 }
 
