@@ -16,7 +16,7 @@ function createServer() {
   var server = net.createServer(function (socket) {
     socket.setEncoding('utf8');
     // color code red \x1b\[31m 
-    messaging.sendRawLine("Globaler Group Chat\r\n!!! Achtung nicht verschlüsselt !!!\r\n\r\nBenutzernamen eingeben:\r\n");
+    messaging.sendRawLine(socket, "Globaler Group Chat\r\n!!! Achtung nicht verschlüsselt !!!\r\n\r\nBenutzernamen eingeben:\r\n");
 
     socket.on('data', function (message) {
       message = message.replace(/\r|\n/g, '');

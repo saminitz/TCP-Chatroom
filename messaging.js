@@ -2,13 +2,21 @@ const global = require('./global');
 const user = require('./user');
 
 function broadcast(socket, message) {
-  let username = user.getUsername(socket);
   for (let connection of global.allConnections) {
     if (connection.socket != socket) {
       sendMessage(connection.socket, message);
     }
   }
-  socket.write(user.usernameAndSpacing(username));
+  usernamePreview(socket);
+}
+
+function broadcastRaw(socket, text) {
+  for (let connection of global.allConnections) {
+    if (connection.socket != socket) {
+      sendRawLineAndUser(connection.socket, text);
+    }
+  }
+  usernamePreview(socket);
 }
 
 function usernamePreview(socket) {
@@ -17,15 +25,20 @@ function usernamePreview(socket) {
 
 function sendRawLine(socket, text) {
   socket.write("\r" + text + "\r\n");
-  usernamePreview(socket); // is it useful here?
+}
+
+function sendRawLineAndUser(socket, text) {
+  sendRawLine(socket, text);
+  usernamePreview(socket);
 }
 
 function sendMessage(socket, text) {
-  socket.write("\r" + user.usernameAndSpacing(user.getUsername(socket)) + ": " + text + "\r\n");
+  socket.write("\r" + user.usernameAndSpacing(user.getUsername(socket)) + " -> " + text + "\r\n");
   usernamePreview(socket);
 }
 
 module.exports.broadcast = broadcast;
-module.exports.usernamePreview = usernamePreview;
+module.exports.broadcastRaw = broadcastRaw;
 module.exports.sendRawLine = sendRawLine;
+module.exports.sendRawLineAndUser = sendRawLineAndUser;
 module.exports.sendMessage = sendMessage;
