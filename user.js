@@ -27,9 +27,15 @@ function getUsername(socket) {
   }).username;
 }
 
+function getSpacing(text, additional=2){
+  let fill = longestUsername + additional -  text.length;
+  return ' '.repeat(fill>0?fill:0);
+}
+
 function usernameAndSpacing(username) {
-  let fillLength = longestUsername - username.length;
-  return ' '.repeat(fillLength) + username;
+  // let fillLength = longestUsername - username.length;
+  // return ' '.repeat(fillLength) + username;
+  return getSpacing(username,0) + username;
 }
 
 function updateLongestUsername() {
@@ -42,5 +48,6 @@ function updateLongestUsername() {
 module.exports.setUsernameIfNotDefined = setUsernameIfNotDefined;
 module.exports.setUsername = setUsername;
 module.exports.getUsername = getUsername;
+module.exports.getSpacing = getSpacing;
 module.exports.usernameAndSpacing = usernameAndSpacing;
 module.exports.updateLongestUsername = updateLongestUsername;

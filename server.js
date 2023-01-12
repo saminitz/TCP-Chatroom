@@ -16,7 +16,7 @@ function createServer() {
   var server = net.createServer(function (socket) {
     socket.setEncoding('utf8');
     // color code red \x1b\[31m 
-    messaging.sendRawLine(socket, "Globaler Group Chat\r\n!!! Achtung nicht verschlüsselt !!!\r\n\r\nBenutzernamen eingeben:\r\n");
+    messaging.sendRawLine(socket, "Globaler Group Chat\r\n!!! Achtung nicht verschlüsselt !!!\r\n\r\nBenutzernamen eingeben: ");
 
     socket.on('data', function (message) {
       message = message.replace(/\r|\n/g, '');
@@ -42,13 +42,11 @@ function createServer() {
 }
 
 function disconnectHandler(socket) {
-  let username = user.getUsername(socket);
-  let item = global.allConnections.find(obj => {
-    return obj.socket == socket;
-  });
+  let item = global.getConnection(socket);
+  additionalmsg = (item.goodbye&&item.goodbye!='') ? ' and said: '+item.goodbye : ''
   global.allConnections.splice(global.allConnections.indexOf(item), 1);
   user.updateLongestUsername();
-  messaging.broadcastRaw(undefined, username + " disconnected");
+  messaging.broadcastRaw(undefined, item.username + " disconnected" + additionalmsg );
 }
 
 function closeSocketConnection(socket) {
