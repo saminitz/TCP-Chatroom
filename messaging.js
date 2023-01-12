@@ -27,8 +27,9 @@ function usernamePreview(socket) {
   socket.write("\r" + user.usernameAndSpacing(user.getUsername(socket)) + ": ");
 }
 
+// Todo: use ┃
 function sendRawLine(socket, text) {
-  socket.write("\r" + text + "\r\n");
+  socket.write("\r" + text + user.getSpacing(text) + "\r\n");
 }
 
 function sendRawLineAndUser(socket, text) {

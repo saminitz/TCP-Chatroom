@@ -12,14 +12,7 @@ function connectionExits(socket) {
   });
 }
 
-function forAllConnections(callback) {
-  allConnections.forEach(element => {
-    callback(element);
-  });
-
-}
 
 module.exports.allConnections = allConnections;
 module.exports.getConnection = getConnection;
-module.exports.forAllConnections = forAllConnections;
 module.exports.connectionExits = connectionExits;
