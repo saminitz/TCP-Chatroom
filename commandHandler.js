@@ -1,5 +1,4 @@
 const global = require('./global');
-const customError = require('./customErrors');
 const user = require('./user');
 const server = require('./server');
 const messaging = require('./messaging');
@@ -69,7 +68,6 @@ const commands = {
 
 
 function query(socket, message) {
-  if (!message.startsWith('/')) return;
 
   let cmdEnd = message.indexOf(' ');
   let command = message.substring(1,cmdEnd>1?cmdEnd:undefined);
@@ -81,8 +79,6 @@ function query(socket, message) {
   } else {
     commands[command].run(socket, parameter);
   }
-
-  throw new customError.StopParent('command')
 }
 
 module.exports.query = query;

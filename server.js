@@ -2,7 +2,6 @@ const net = require('net');
 const os = require('os');
 
 const global = require('./global');
-const customError = require('./customErrors');
 const commandHandler = require('./commandHandler');
 const user = require('./user');
 const messaging = require('./messaging');
@@ -20,15 +19,19 @@ function createServer() {
 
     socket.on('data', function (message) {
       message = message.replace(/\r|\n/g, '');
-      try {
-        user.setUsernameIfNotDefined(socket, message);
+      if (message == '') return;
+
+      if (!global.connectionExits(socket)) {
+        // First message, user set username
+        user.setNewUser(socket, message);
+      }else if (message.at(0) == "/"){
+        // Message is a command
         commandHandler.query(socket, message);
+      }else {
+        // Send a Text message
         messaging.broadcast(socket, message);
-      } catch (error) {
-        if (!(error instanceof customError.StopParent)) {
-          throw error;
-        }
       }
+
     })
 
     socket.on('close', function () { disconnectHandler(socket) });
