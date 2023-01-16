@@ -1,16 +1,13 @@
 const global = require('./global');
-const customError = require('./customErrors');
 const messaging = require('./messaging');
 
 let longestUsername = 0;
 
-function setUsernameIfNotDefined(socket, username) {
-  if (global.connectionExits(socket)) return;
+function setNewUser(socket, username) {
   let item = { socket: socket, username: 'newUser' };
   global.allConnections.push(item);
   setUsername(item, username);
   messaging.broadcastRaw(socket, getUsername(socket) + ' ist dem Chat beigetreten');
-  throw new customError.StopParent('username');
 }
 
 function setUsername(connection, username) {
@@ -39,7 +36,7 @@ function updateLongestUsername() {
   });
 }
 
-module.exports.setUsernameIfNotDefined = setUsernameIfNotDefined;
+module.exports.setNewUser = setNewUser;
 module.exports.setUsername = setUsername;
 module.exports.getUsername = getUsername;
 module.exports.getSpacing = getSpacing;
