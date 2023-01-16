@@ -5,9 +5,7 @@ const messaging = require('./messaging');
 let longestUsername = 0;
 
 function setUsernameIfNotDefined(socket, username) {
-  if (global.connectionExits(socket)) {
-    return;
-  }
+  if (global.connectionExits(socket)) return;
   let item = { socket: socket, username: 'newUser' };
   global.allConnections.push(item);
   setUsername(item, username);
@@ -22,9 +20,7 @@ function setUsername(connection, username) {
 }
 
 function getUsername(socket) {
-  return global.allConnections.find(obj => {
-    return obj.socket == socket;
-  }).username;
+  return global.getConnection(socket).username;
 }
 
 function getSpacing(text, additional=2){
@@ -33,16 +29,14 @@ function getSpacing(text, additional=2){
 }
 
 function usernameAndSpacing(username) {
-  // let fillLength = longestUsername - username.length;
-  // return ' '.repeat(fillLength) + username;
   return getSpacing(username,0) + username;
 }
 
 function updateLongestUsername() {
   longestUsername = 0;
-  for (const connection of global.allConnections) {
+  global.allConnections.forEach(connection => {
     longestUsername = connection.username.length > longestUsername ? connection.username.length : longestUsername;
-  }
+  });
 }
 
 module.exports.setUsernameIfNotDefined = setUsernameIfNotDefined;

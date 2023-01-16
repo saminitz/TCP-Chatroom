@@ -3,7 +3,6 @@ const customError = require('./customErrors');
 const user = require('./user');
 const server = require('./server');
 const messaging = require('./messaging');
-const { log } = require('console');
 
 const commands = {
   "rename": {
@@ -68,14 +67,12 @@ const commands = {
   */
 }
 
-function query(socket, message) {
-  if (!message.startsWith('/')) {
-    return;
-  }
 
-  // let command = message.substr(1).split(' ')[0];
-  let cmdend = message.indexOf(' ');
-  let command = message.substring(1,cmdend>1?cmdend:undefined);
+function query(socket, message) {
+  if (!message.startsWith('/')) return;
+
+  let cmdEnd = message.indexOf(' ');
+  let command = message.substring(1,cmdEnd>1?cmdEnd:undefined);
   
   let parameter = message.substr(command.length + 1).trim(); // 1 for '/'
 
@@ -84,34 +81,6 @@ function query(socket, message) {
   } else {
     commands[command].run(socket, parameter);
   }
-
-  // switch (command[0].toLowerCase()) {
-  //   case '/rename':
-
-  //     break;
-
-  //   case '/users':
-  //   case '/list':
-  //     usernames = []
-  //     for (const socketItem of global.allConnections) {
-  //       usernames.push(socketItem.username);
-  //     }
-  //     messaging.sendRawLineAndUser(socket, "Currently connected users are: " + usernames.join(", ") + "\r\n");
-  //     break;
-
-  //   case '/logout':
-  //     server.closeSocketConnection(socket);
-  //     break;
-
-  //   case '/help':
-  //     messaging.sendRawLine(
-  //       ''
-  //     )
-  //     break;
-
-  //   default:
-  //     break;
-  // }
 
   throw new customError.StopParent('command')
 }
