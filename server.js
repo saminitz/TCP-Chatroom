@@ -46,7 +46,7 @@ function createServer() {
 
 function disconnectHandler(socket) {
   let item = global.getConnection(socket);
-  additionalmsg = (item.goodbye&&item.goodbye!='') ? ' and said: '+item.goodbye : ''
+  additionalmsg = (item.goodbye&&item.goodbye!='') ? ' und sagt: '+item.goodbye : ''
   global.allConnections.splice(global.allConnections.indexOf(item), 1);
   user.updateLongestUsername();
   messaging.broadcastRaw(undefined, item.username + " disconnected" + additionalmsg );

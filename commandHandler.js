@@ -22,7 +22,7 @@ const commands = {
       global.allConnections.forEach(element => {
         usernames.push(element.username);
       });
-      messaging.sendRawLineAndUser(socket, "Currently connected users are: " + usernames.join(", "));
+      messaging.sendRawLineAndUser(socket, "Folgende Benutzer sind verbunden: " + usernames.join(", "));
     },
     "usage": "/users",
     "man": "Der Befehl 'users' listet alle aktiven Teilnehmer im Chat"
@@ -46,7 +46,7 @@ const commands = {
       }
       cmd = cmd!=''?cmd:'help';
       if (commands[cmd] == undefined) {
-        messaging.sendRawLineAndUser(socket, "Command '" + cmd + "' not found");
+        messaging.sendRawLineAndUser(socket, "Befehl '" + cmd + "' nicht gefunden");
         return;
       }
       messaging.sendRawLine(socket, commands[cmd]?.usage);
@@ -75,7 +75,7 @@ function query(socket, message) {
   let parameter = message.substr(command.length + 1).trim(); // 1 for '/'
 
   if (commands[command] == undefined) {
-    messaging.sendRawLineAndUser(socket, "Command invalid");
+    messaging.sendRawLineAndUser(socket, "Befehl ungültig");
   } else {
     commands[command].run(socket, parameter);
   }
