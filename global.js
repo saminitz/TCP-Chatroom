@@ -12,7 +12,6 @@ function connectionExits(socket) {
   });
 }
 
-
 module.exports.allConnections = allConnections;
 module.exports.getConnection = getConnection;
 module.exports.connectionExits = connectionExits;
