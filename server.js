@@ -24,10 +24,10 @@ function createServer() {
       if (!global.connectionExits(socket)) {
         // First message, user set username
         user.setNewUser(socket, message);
-      }else if (message.at(0) == "/"){
+      } else if (message.at(0) == "/") {
         // Message is a command
         commandHandler.query(socket, message);
-      }else {
+      } else {
         // Send a Text message
         messaging.broadcast(socket, message);
       }
@@ -46,10 +46,10 @@ function createServer() {
 
 function disconnectHandler(socket) {
   let item = global.getConnection(socket);
-  additionalmsg = (item.goodbye&&item.goodbye!='') ? ' und sagt: '+item.goodbye : ''
+  let additionalMsg = (item.goodbye && item.goodbye != '') ? ' und sagt: ' + item.goodbye : ''
   global.allConnections.splice(global.allConnections.indexOf(item), 1);
   user.updateLongestUsername();
-  messaging.broadcastRaw(undefined, item.username + " disconnected" + additionalmsg );
+  messaging.broadcastRaw(undefined, item.username + " disconnected" + additionalMsg);
 }
 
 function closeSocketConnection(socket) {
