@@ -18,7 +18,7 @@ const commands = {
 
   "users": {
     "run": (socket) => {
-      usernames = []
+      let usernames = []
       global.allConnections.forEach(element => {
         usernames.push(element.username);
       });
@@ -28,7 +28,7 @@ const commands = {
     "man": "Der Befehl 'users' listet alle aktiven Teilnehmer im Chat"
   },
   "logout": {
-    "run": (socket, msg)=>{
+    "run": (socket, msg) => {
       global.getConnection(socket).goodbye = msg
       server.closeSocketConnection(socket);
     },
@@ -36,7 +36,7 @@ const commands = {
     "man": "Dieser Befehl beendet den Chat. Weiterer Text kann als Abschlusstext gesendet werden."
   },
   "help": {
-    "run": (socket, cmd)=>{
+    "run": (socket, cmd) => {
       if (cmd == 'all') {
         commands.forEach(element => {
           messaging.sendRawLine(socket, commands[element].usage);
@@ -44,7 +44,7 @@ const commands = {
         });
         return;
       }
-      cmd = cmd!=''?cmd:'help';
+      cmd = cmd != '' ? cmd : 'help';
       if (commands[cmd] == undefined) {
         messaging.sendRawLineAndUser(socket, "Befehl '" + cmd + "' nicht gefunden");
         return;
@@ -66,12 +66,9 @@ const commands = {
   */
 }
 
-
 function query(socket, message) {
-
   let cmdEnd = message.indexOf(' ');
-  let command = message.substring(1,cmdEnd>1?cmdEnd:undefined);
-  
+  let command = message.substring(1, cmdEnd > 1 ? cmdEnd : undefined);
   let parameter = message.substr(command.length + 1).trim(); // 1 for '/'
 
   if (commands[command] == undefined) {

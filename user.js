@@ -20,13 +20,13 @@ function getUsername(socket) {
   return global.getConnection(socket).username;
 }
 
-function getSpacing(text, additional=2){
-  let fill = longestUsername + additional -  text.length;
-  return ' '.repeat(fill>0?fill:0);
+function getSpacing(text, additional = 2) {
+  let fill = longestUsername + additional - text.length;
+  return ' '.repeat(fill > 0 ? fill : 0);
 }
 
 function usernameAndSpacing(username) {
-  return getSpacing(username,0) + username;
+  return getSpacing(username, 0) + username;
 }
 
 function updateLongestUsername() {
