@@ -19,7 +19,10 @@ function createServer() {
 
     socket.on('data', function (message) {
       message = message.replace(/\r|\n/g, '');
-      if (message == '') return;
+      if (message == '') {
+        messaging.usernamePreview(socket);
+        return;
+      }
 
       if (!global.connectionExits(socket)) {
         // First message, user set username

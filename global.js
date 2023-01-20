@@ -1,8 +1,8 @@
 let allConnections = [];
 
-function getConnection(socket) {
+function getConnection(identifier) {
   return allConnections.find(obj => {
-    return obj.socket == socket;
+    return obj.socket == identifier || obj.username == identifier;
   });
 }
 

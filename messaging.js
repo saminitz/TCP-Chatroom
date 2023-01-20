@@ -23,6 +23,10 @@ function broadcastRaw(socket, text) {
   }
 }
 
+function sendDirectMessage(sender, receiver, message) {
+  sendRawLineAndUser(receiver, "\x1B[7m[" + user.getUsername(sender) + " -> " + user.getUsername(receiver) + "]: " + message + "\x1b[0m");
+}
+
 function usernamePreview(socket) {
   socket.write("\r" + user.usernameAndSpacing(user.getUsername(socket)) + ": ");
 }
@@ -44,6 +48,7 @@ function sendMessage(socket, senderName, text) {
 
 module.exports.broadcast = broadcast;
 module.exports.broadcastRaw = broadcastRaw;
+module.exports.sendDirectMessage = sendDirectMessage;
 module.exports.usernamePreview = usernamePreview;
 module.exports.sendRawLine = sendRawLine;
 module.exports.sendRawLineAndUser = sendRawLineAndUser;

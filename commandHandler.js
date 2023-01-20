@@ -39,6 +39,7 @@ const commands = {
   },
 
   "users": {
+    "alias": ["list", "online"],
     "run": (socket) => {
       let usernames = []
       global.allConnections.forEach(element => {
@@ -57,8 +58,27 @@ const commands = {
     },
     "usage": "/logout <Nachricht>",
     "man": "Dieser Befehl beendet den Chat. Weiterer Text kann als Abschlusstext gesendet werden."
-  }
+  },
 
+  "msg": {
+    "alias": ["pm"],
+    "run": (socket, msg) => {
+      if (msg.length > 0 && msg.indexOf(' ') != -1) {
+        let receiverUsername = msg.substring(0, msg.indexOf(' '));
+        let message = msg.substring(receiverUsername.length + 1);
+        let receiverConnection = global.getConnection(receiverUsername)
+        if (receiverConnection == undefined) {
+          messaging.sendRawLineAndUser(socket, "Benutzer nicht gefunden. Überprüfe mit /list welche Nutzer verfügbar sind");
+          return;
+        }
+
+        messaging.sendDirectMessage(socket, receiverConnection.socket, message);
+        messaging.usernamePreview(socket);
+      }
+    },
+    "usage": "/msg <Username> <Nachricht>",
+    "man": "Mit msg können Nachrichten an einzelne Benutzer geschickt werden."
+  }
   /*
   "users": {
     "run": (socket, appendix)=>{
@@ -68,6 +88,14 @@ const commands = {
     "man": ""
   },
   */
+}
+
+function initializeCommandAliases() {
+  for (const [command, values] of Object.entries(commands)) {
+    if ('alias' in values) {
+      values.alias.forEach(element => commands[element] = commands[command]);
+    }
+  }
 }
 
 function query(socket, message) {
@@ -81,5 +109,7 @@ function query(socket, message) {
     commands[command].run(socket, parameter);
   }
 }
+
+initializeCommandAliases();
 
 module.exports.query = query;
