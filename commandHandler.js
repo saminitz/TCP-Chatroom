@@ -4,38 +4,6 @@ const server = require('./server');
 const messaging = require('./messaging');
 
 const commands = {
-  "rename": {
-    "run": (socket, username) => {
-      if (username.length > 0) {
-        let oldUsername = user.getUsername(socket);
-        user.setUsername(global.getConnection(socket), username);
-        messaging.broadcastRaw(socket, oldUsername + ' hat sich zu ' + user.getUsername(socket) + ' umbenannt');
-      } else {
-        messaging.sendRawLineAndUser(socket, commands["rename"].usage);
-      }
-    },
-    "usage": "/rename <Name>",
-    "man": "Mit 'rename' kann der Benutzername geändert werden, dabei werden alle Leerzeichen und Umbrüche entfernt."
-  },
-  "users": {
-    "run": (socket) => {
-      let usernames = []
-      global.allConnections.forEach(element => {
-        usernames.push(element.username);
-      });
-      messaging.sendRawLineAndUser(socket, "Folgende Benutzer sind verbunden: " + usernames.join(", "));
-    },
-    "usage": "/users",
-    "man": "Der Befehl 'users' listet alle aktiven Teilnehmer im Chat"
-  },
-  "logout": {
-    "run": (socket, msg) => {
-      global.getConnection(socket).goodbye = msg
-      server.closeSocketConnection(socket);
-    },
-    "usage": "/logout <Nachricht>",
-    "man": "Dieser Befehl beendet den Chat. Weiterer Text kann als Abschlusstext gesendet werden."
-  },
   "help": {
     "run": (socket, cmd) => {
       if (cmd == '') {
@@ -55,6 +23,42 @@ const commands = {
     "usage": "/help <Befehl>",
     "man": "Zeige Hilfe zu Befehlen an"
   },
+
+  "rename": {
+    "run": (socket, username) => {
+      if (username.length > 0) {
+        let oldUsername = user.getUsername(socket);
+        user.setUsername(global.getConnection(socket), username);
+        messaging.broadcastRaw(socket, oldUsername + ' hat sich zu ' + user.getUsername(socket) + ' umbenannt');
+      } else {
+        messaging.sendRawLineAndUser(socket, commands["rename"].usage);
+      }
+    },
+    "usage": "/rename <Name>",
+    "man": "Mit 'rename' kann der Benutzername geändert werden, dabei werden alle Leerzeichen und Umbrüche entfernt."
+  },
+
+  "users": {
+    "run": (socket) => {
+      let usernames = []
+      global.allConnections.forEach(element => {
+        usernames.push(element.username);
+      });
+      messaging.sendRawLineAndUser(socket, "Folgende Benutzer sind verbunden: " + usernames.join(", "));
+    },
+    "usage": "/users",
+    "man": "Der Befehl 'users' listet alle aktiven Teilnehmer im Chat"
+  },
+
+  "logout": {
+    "run": (socket, msg) => {
+      global.getConnection(socket).goodbye = msg
+      server.closeSocketConnection(socket);
+    },
+    "usage": "/logout <Nachricht>",
+    "man": "Dieser Befehl beendet den Chat. Weiterer Text kann als Abschlusstext gesendet werden."
+  }
+
   /*
   "users": {
     "run": (socket, appendix)=>{
