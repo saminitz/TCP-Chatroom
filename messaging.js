@@ -44,6 +44,7 @@ function sendMessage(socket, senderName, text) {
 
 module.exports.broadcast = broadcast;
 module.exports.broadcastRaw = broadcastRaw;
+module.exports.usernamePreview = usernamePreview;
 module.exports.sendRawLine = sendRawLine;
 module.exports.sendRawLineAndUser = sendRawLineAndUser;
 module.exports.sendMessage = sendMessage;

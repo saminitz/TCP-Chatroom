@@ -10,12 +10,13 @@ const commands = {
         let oldUsername = user.getUsername(socket);
         user.setUsername(global.getConnection(socket), username);
         messaging.broadcastRaw(socket, oldUsername + ' hat sich zu ' + user.getUsername(socket) + ' umbenannt');
+      } else {
+        messaging.sendRawLineAndUser(socket, commands["rename"].usage);
       }
     },
     "usage": "/rename <Name>",
     "man": "Mit 'rename' kann der Benutzername geändert werden, dabei werden alle Leerzeichen und Umbrüche entfernt."
   },
-
   "users": {
     "run": (socket) => {
       let usernames = []
@@ -37,14 +38,13 @@ const commands = {
   },
   "help": {
     "run": (socket, cmd) => {
-      if (cmd == 'all') {
-        commands.forEach(element => {
-          messaging.sendRawLine(socket, commands[element].usage);
-          messaging.sendRawLineAndUser(socket, commands[element].man);
-        });
+      if (cmd == '') {
+        for (const key in commands) {
+          messaging.sendRawLine(socket, commands[key].usage);
+        }
+        messaging.usernamePreview(socket);
         return;
       }
-      cmd = cmd != '' ? cmd : 'help';
       if (commands[cmd] == undefined) {
         messaging.sendRawLineAndUser(socket, "Befehl '" + cmd + "' nicht gefunden");
         return;
@@ -52,7 +52,7 @@ const commands = {
       messaging.sendRawLine(socket, commands[cmd]?.usage);
       messaging.sendRawLineAndUser(socket, commands[cmd]?.man);
     },
-    "usage": "/help <Befehl>/all",
+    "usage": "/help <Befehl>",
     "man": "Zeige Hilfe zu Befehlen an"
   },
   /*
@@ -68,7 +68,7 @@ const commands = {
 
 function query(socket, message) {
   let cmdEnd = message.indexOf(' ');
-  let command = message.substring(1, cmdEnd > 1 ? cmdEnd : undefined);
+  let command = message.substring(1, cmdEnd > 1 ? cmdEnd : undefined).toLowerCase();
   let parameter = message.substr(command.length + 1).trim(); // 1 for '/'
 
   if (commands[command] == undefined) {
