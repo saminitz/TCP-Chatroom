@@ -78,6 +78,13 @@ const commands = {
     },
     "usage": "/msg <Username> <Nachricht>",
     "man": "Mit msg können Nachrichten an einzelne Benutzer geschickt werden."
+  },
+  "clear": {
+    "run": (socket) => {
+      messaging.sendRawLineAndUser(socket, '\x1B[1;1H\x1B[2J');
+    },
+    "usage": "",
+    "man": ""
   }
   /*
   "users": {
