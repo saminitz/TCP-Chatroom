@@ -5,6 +5,7 @@ const global = require('./global');
 const commandHandler = require('./commandHandler');
 const user = require('./user');
 const messaging = require('./messaging');
+const { measureMemory } = require('vm');
 
 let args = process.argv.slice(2);
 let port = args.length > 0 ? args[0] : 1337;
@@ -14,7 +15,8 @@ let localIP = [].concat(...Object.values(os.networkInterfaces())).find(x => !x.i
 function createServer() {
   var server = net.createServer(function (socket) {
     socket.setEncoding('utf8');
-    // color code red \x1b\[31m 
+    
+    messaging.clearScreen(socket);
     messaging.sendRawLine(socket, "Globaler Group Chat\r\n!!! Achtung nicht verschlüsselt !!!\r\n\r\nBenutzernamen eingeben: ");
 
     socket.on('data', function (message) {
