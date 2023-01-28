@@ -83,8 +83,8 @@ const commands = {
     "run": (socket) => {
       messaging.sendRawLineAndUser(socket, '\x1B[1;1H\x1B[2J');
     },
-    "usage": "",
-    "man": ""
+    "usage": "/clear",
+    "man": "Mit clear wird das gesamte Konsolen Fenster aufgeräumt"
   }
   /*
   "users": {
